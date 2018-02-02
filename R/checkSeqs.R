@@ -22,7 +22,7 @@ checkSeqs <- function(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1]
 
   options <- match.arg(option, choices = c("extend", "trim", "error"))
   ei <- fg.seqs %in% bg.seqs
-  if (!all(el)) {
+  if (!all(ei)) {
     message("Not all foreground sequences exist in background sequences.")
     if (option == "extend") {
       message("Background sequences are extended.")
