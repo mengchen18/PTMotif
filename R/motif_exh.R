@@ -24,14 +24,14 @@ motif_exh <- function(seqs, min.seqs=1, ncores = 1) {
   dots <- rep(".", length(seqs[[1]]))
   ls <- combn(seq_along(seqs), m = 2)
   motifs <- mclapply(1:ncol(ls), function(x, mot) {
-    i <- seqs[[ls[1, x]]] == seqs[[ls[2, x]]]
-    if (sum(i) > 1)
-      mot[i] <- seqs[[ls[1, x]]][i]
+    i <- seqs[[ls[1, x]]] == seqs[[ls[2, x]]] & seqs[[ls[1, x]]] != "_"
+    if (sum(i) <= 1)
+      return()
+    mot[i] <- seqs[[ls[1, x]]][i]
     paste0(mot, collapse = "")
   }, mot = dots, mc.cores = ncores)
-  motifs <- unique(gsub("_", ".", motifs))
-  motifs <- setdiff(motifs, paste(dots, collapse = ""))
-
+  motifs <- unlist(motifs)
+  
   count <- mclapply(motifs, function(x) sum(str_detect(seq0, x)),
                     mc.cores = ncores)
   count <- unlist(count)
