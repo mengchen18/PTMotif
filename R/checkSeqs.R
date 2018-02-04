@@ -20,6 +20,16 @@ checkSeqs <- function(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1]
   if (n1 != n2)
     stop("Foreground and background sequneces should have a same length.")
 
+  if (any(duplicated(fg.seqs))) {
+    fg.seqs <- unique(fg.seqs)
+    warning("Duplicated sequences detected in foreground list and removed. ")
+  }
+  if (any(duplicated(bg.seqs))) {
+    bg.seqs <- unique(bg.seqs)
+    warning("Duplicated sequences detected in background list and removed. ")
+  }
+    
+
   options <- match.arg(option, choices = c("extend", "trim", "error"))
   ei <- fg.seqs %in% bg.seqs
   if (!all(ei)) {
