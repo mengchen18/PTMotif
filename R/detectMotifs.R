@@ -9,6 +9,7 @@
 #' @details more details here
 #' @return a \code{data.frame} of the over-representation data analysis
 #' @importFrom parallel mclapply
+#' @importFrom stringr str_detect
 #' @export
 #'
 
@@ -21,7 +22,7 @@ detectMotifs <- function(fg.seqs, bg.seqs, method = c("cvp", "exh")[1], min.seqs
     message("Checking input sequences ...")
   seqs <- checkSeqs(fg.seqs, bg.seqs, option = "extend")
 
-  motif_cvp <- motif_exh <- ""
+  motif_cvp <- motif_exh <- NULL
   if ("cvp" %in% method) {
     if (verbose)
       message("Detecting potential motifs using 'cvp' algorithm ...")

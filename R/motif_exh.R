@@ -30,8 +30,8 @@ motif_exh <- function(seqs, min.seqs=1, ncores = 1) {
     mot[i] <- seqs[[ls[1, x]]][i]
     paste0(mot, collapse = "")
   }, mot = dots, mc.cores = ncores)
-  motifs <- unlist(motifs)
-  
+  motifs <- unique(unlist(motifs))
+
   count <- mclapply(motifs, function(x) sum(str_detect(seq0, x)),
                     mc.cores = ncores)
   count <- unlist(count)
