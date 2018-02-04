@@ -2,7 +2,7 @@
 #' 
 #' @docType data
 #' @name motifExampleData
-#' @usage data(diamonds)
+#' @usage data(motifExampleData)
 #' @format A \code{list} with two elements:
 #' \describe{
 #'   \item{foreground}{foreground sequences}
