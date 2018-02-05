@@ -34,6 +34,11 @@ detectMotifs <- function(fg.seqs, bg.seqs, method = c("cvp", "exh")[1], min.seqs
     motif_exh <- motif_exh(seqs$fg.seqs, min.seqs=min.seqs, ncores = ncores)
   }
   motifs <- c(motif_cvp, motif_exh)
+  
+  if (length(motifs) == 0) {
+    message("No potential motif discovered, try to lower the min.seqs.")
+    return (NULL)
+  }
 
 
   if (verbose)
