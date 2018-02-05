@@ -10,7 +10,7 @@
   \item{background}{background sequences}
 }}
 \usage{
-data(diamonds)
+data(motifExampleData)
 }
 \description{
 Example dataset for motif analysis

@@ -2,8 +2,9 @@
 
 export(checkSeqs)
 export(detectMotifs)
+export(motif_all)
 export(motif_cvp)
-export(motif_exh)
+export(motif_long)
 export(motifor)
 export(subSeqs)
 importFrom(parallel,mclapply)

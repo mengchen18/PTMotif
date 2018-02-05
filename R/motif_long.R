@@ -12,7 +12,7 @@
 #' @importFrom stringr str_detect
 #' @export
 #'
-motif_exh <- function(seqs, min.seqs=1, ncores = 1) {
+motif_long <- function(seqs, min.seqs=1, ncores = 1) {
 
   if (length(seqs) < min.seqs) {
     warning("length of seqs < min.seqs")

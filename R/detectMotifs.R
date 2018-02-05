@@ -13,7 +13,7 @@
 #' @export
 #'
 
-detectMotifs <- function(fg.seqs, bg.seqs, method = c("cvp", "exh")[1], min.seqs = 5,
+detectMotifs <- function(fg.seqs, bg.seqs, method = c("cvp", "long", "all")[1], min.seqs = 5,
                          max.fdr = 1e-2, ncores = 1, verbose = TRUE) {
 
   method <- match.arg(method, c("cvp", "exh"), several.ok = TRUE)
@@ -22,18 +22,23 @@ detectMotifs <- function(fg.seqs, bg.seqs, method = c("cvp", "exh")[1], min.seqs
     message("Checking input sequences ...")
   seqs <- checkSeqs(fg.seqs, bg.seqs, option = "extend")
 
-  motif_cvp <- motif_exh <- NULL
+  motif_cvp <- motif_long <- motif_all <- NULL
   if ("cvp" %in% method) {
     if (verbose)
       message("Detecting potential motifs using 'cvp' algorithm ...")
     motif_cvp <- motif_cvp(seqs$fg.seqs, min.seqs=min.seqs, ncores = ncores)
   }
-  if ("exh" %in% method) {
+  if ("long" %in% method && !"all" %in% method) {
     if (verbose)
-      message("Detecting potential motifs using 'exh' algorithm ...")
-    motif_exh <- motif_exh(seqs$fg.seqs, min.seqs=min.seqs, ncores = ncores)
+      message("Detecting potential motifs using 'long' algorithm ...")
+    motif_long <- motif_long(seqs$fg.seqs, min.seqs=min.seqs, ncores = ncores)
   }
-  motifs <- c(motif_cvp, motif_exh)
+  if ("all" %in% method) {
+    if (verbose)
+      message("Detecting potential motifs using 'all' algorithm ...")
+    motif_all <- motif_all(seqs$fg.seqs, min.seqs=min.seqs, ncores = ncores)
+  }
+  motifs <- c(motif_cvp, motif_long, motif_all)
   
   if (length(motifs) == 0) {
     message("No potential motif discovered, try to lower the min.seqs.")
