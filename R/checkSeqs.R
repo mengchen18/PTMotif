@@ -11,6 +11,7 @@
 #'
 checkSeqs <- function(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1]) {
 
+  # sequence length
   n1 <- unique(nchar(fg.seqs))
   n2 <- unique(nchar(bg.seqs))
   if (length(n1) > 1)
@@ -20,6 +21,7 @@ checkSeqs <- function(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1]
   if (n1 != n2)
     stop("Foreground and background sequneces should have a same length.")
 
+  # duplicated seqs
   if (any(duplicated(fg.seqs))) {
     fg.seqs <- unique(fg.seqs)
     warning("Duplicated sequences detected in foreground list and removed. ")
@@ -28,8 +30,15 @@ checkSeqs <- function(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1]
     bg.seqs <- unique(bg.seqs)
     warning("Duplicated sequences detected in background list and removed. ")
   }
-    
 
+  #sequence character, only AA letters and _
+  aaa <- c("_","A","C","D","E","F","G","H","I","K","L","M","N","P","Q","R","S","T","V","W","Y")
+  j <- unique(unlist(strsplit(c(fg.seqs, bg.seqs), "|"))) %in% aaa
+  if (!all(j)) 
+    stop(paste("fg.seqs and bg.seqs should be amino acid sequences, allowed letters include:", 
+      paste(aaa, collapse = ",")))
+    
+  # all fg should be in bg
   options <- match.arg(option, choices = c("extend", "trim", "error"))
   ei <- fg.seqs %in% bg.seqs
   if (!all(ei)) {
