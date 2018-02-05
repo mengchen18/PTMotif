@@ -19,8 +19,6 @@ motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 1e-2) {
   count <- unlist(count)
 
   nbg <- length(bg.seqs)
-  lll <<- list(q = fg.count, m = count, n = nbg,
-               k = n.fg.seqs, lower.tail = FALSE, log.p = FALSE)
   pv <- phyper(q = fg.count, m = count, n = nbg,
                k = n.fg.seqs, lower.tail = FALSE, log.p = FALSE)
   fdr <- p.adjust(pv, method = "fdr")
