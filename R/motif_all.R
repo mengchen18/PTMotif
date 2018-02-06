@@ -48,6 +48,11 @@ motif_all <- function(seqs, min.seqs, ncores = 1, verbose = FALSE) {
   ##
   ll <- list()
   v <- toAAFreq(seqmat, aaa = aaa, n = min.seqs)
+  tt <<- v
+  if (nrow(v[[1]]) == 0) {
+    message(paste("No motif presents more than", min.seqs, "times."))
+    return()
+  }
   ll[[1]] <- v
   len <- ncol(seqmat)
   st <- rep(TRUE, nrow(seqmat))
