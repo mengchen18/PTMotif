@@ -16,7 +16,7 @@
 detectMotifs <- function(fg.seqs, bg.seqs, method = c("cvp", "long", "all")[1], min.seqs = 5,
                          max.fdr = 1e-2, ncores = 1, verbose = TRUE) {
 
-  method <- match.arg(method, c("cvp", "exh"), several.ok = TRUE)
+  method <- match.arg(method, c("cvp", "long", "all"), several.ok = TRUE)
 
   if (verbose)
     message("Checking input sequences ...")
@@ -36,7 +36,7 @@ detectMotifs <- function(fg.seqs, bg.seqs, method = c("cvp", "long", "all")[1], 
   if ("all" %in% method) {
     if (verbose)
       message("Detecting potential motifs using 'all' algorithm ...")
-    motif_all <- motif_all(seqs$fg.seqs, min.seqs=min.seqs, ncores = ncores)
+    motif_all <- motif_all(seqs$fg.seqs, min.seqs=min.seqs, ncores = ncores, verbose=verbose)
   }
   motifs <- c(motif_cvp, motif_long, motif_all)
   

@@ -53,7 +53,7 @@ motif_all <- function(seqs, min.seqs, ncores = 1, verbose = FALSE) {
   st <- rep(TRUE, nrow(seqmat))
   for (i in 2:nc) {
     if (verbose)
-      cat(paste("Trying to find motifs having ", i, "amino acids ...\n"))
+      cat(paste("Trying to find motifs having", i, "amino acids ...\n"))
     v <- mclapply(v, function(x) {
       rindex <- st
       for (ir in 1:nrow(x)) {
@@ -72,7 +72,7 @@ motif_all <- function(seqs, min.seqs, ncores = 1, verbose = FALSE) {
   res <- unlist(ll[-1], recursive = FALSE)
 
   if (verbose)
-    cat("Summarizing results...")
+    cat("Summarizing results...\n")
   sv <- rep(".", nc)
   res <- sapply(res, function(x) {
     pp <- sv
