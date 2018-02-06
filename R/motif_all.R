@@ -70,7 +70,11 @@ motif_all <- function(seqs, min.seqs, ncores = 1, verbose = FALSE) {
     ll[[i]] <- v
   }
   res <- unlist(ll[-1], recursive = FALSE)
-
+  
+  if (length(res) == 0) {
+    message(paste("No motif presents more than", min.seqs, "times."))
+    return()
+  }
   if (verbose)
     cat("Summarizing results...\n")
   sv <- rep(".", nc)

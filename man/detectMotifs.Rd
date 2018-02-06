@@ -4,8 +4,8 @@
 \alias{detectMotifs}
 \title{Detect over-represented motifs}
 \usage{
-detectMotifs(fg.seqs, bg.seqs, method = c("cvp", "long", "all")[1],
-  min.seqs = 5, max.fdr = 0.01, ncores = 1, verbose = TRUE)
+detectMotifs(fg.seqs, bg.seqs, method = c("cvp", "all")[1], min.seqs = 5,
+  max.fdr = 0.01, ncores = 1, verbose = TRUE)
 }
 \arguments{
 \item{fg.seqs}{a character vector of foreground sequences}

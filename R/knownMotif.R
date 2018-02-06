@@ -1,9 +1,9 @@
-#' Annotate discovered motif with known motif
+#' Annotate discovered motif with known motifs
 #' @author Chen Meng
 #' @references http://hprd.org/PhosphoMotif_finder
 #' @param x a \code{data.frame} has at least a column names as "motif"
 #' @return a \code{data.frame} has two other columns attached at the end 
-#'   of origin input \code{x} for known motifs and the corresponding kinases
+#'   of original input \code{x} for known motifs and the corresponding kinases
 #' @export
 
 annotKnownMotifs <- function(x) {

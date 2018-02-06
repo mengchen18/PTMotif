@@ -2,7 +2,7 @@
 % Please edit documentation in R/knownMotif.R
 \name{annotKnownMotifs}
 \alias{annotKnownMotifs}
-\title{Annotate discovered motif with known motif}
+\title{Annotate discovered motif with known motifs}
 \usage{
 annotKnownMotifs(x)
 }
@@ -11,10 +11,10 @@ annotKnownMotifs(x)
 }
 \value{
 a \code{data.frame} has two other columns attached at the end 
-  of origin input \code{x} for known motifs and the corresponding kinases
+  of original input \code{x} for known motifs and the corresponding kinases
 }
 \description{
-Annotate discovered motif with known motif
+Annotate discovered motif with known motifs
 }
 \references{
 http://hprd.org/PhosphoMotif_finder
