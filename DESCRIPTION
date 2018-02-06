@@ -1,10 +1,10 @@
 Package: PTMotif
-Title: What the Package Does (one line, title case)
-Version: 0.0.2
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
+Title: Detect PTM motifs
+Version: 0.0.3
+Authors@R: person("Chen", "Meng", email = "mengchen18@gmail.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.3.2)
-License: What license is it under?
+License: GPL3
 Encoding: UTF-8
 LazyData: true
 Imports: stringr, parallel

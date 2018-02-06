@@ -5,7 +5,7 @@
 \title{Detect over-represented motifs}
 \usage{
 detectMotifs(fg.seqs, bg.seqs, method = c("cvp", "all")[1], min.seqs = 5,
-  max.fdr = 0.01, ncores = 1, verbose = TRUE)
+  max.fdr = 0.01, ncores = 1, verbose = TRUE, annotate = FALSE)
 }
 \arguments{
 \item{fg.seqs}{a character vector of foreground sequences}
@@ -19,6 +19,8 @@ detectMotifs(fg.seqs, bg.seqs, method = c("cvp", "all")[1], min.seqs = 5,
 \item{max.fdr}{the maximum FDR to be reported}
 
 \item{ncores}{the number of cores to be used, passed to \code{mclapply}.}
+
+\item{annotate}{whether the discovered motif should be annotated by known motifs}
 }
 \value{
 a \code{data.frame} of the over-representation data analysis

@@ -6,6 +6,7 @@
 #' @param min.seqs the minimum frequency of a motif should be considered
 #' @param ncores the number of cores to be used, passed to \code{mclapply}.
 #' @param max.fdr the maximum FDR to be reported
+#' @param annotate whether the discovered motif should be annotated by known motifs
 #' @details more details here
 #' @return a \code{data.frame} of the over-representation data analysis
 #' @importFrom parallel mclapply
@@ -14,7 +15,7 @@
 #'
 
 detectMotifs <- function(fg.seqs, bg.seqs, method = c("cvp", "all")[1], min.seqs = 5,
-                         max.fdr = 1e-2, ncores = 1, verbose = TRUE) {
+                         max.fdr = 1e-2, ncores = 1, verbose = TRUE, annotate = FALSE) {
 
   method <- match.arg(method, c("cvp", "all"), several.ok = TRUE)
 
@@ -44,8 +45,15 @@ detectMotifs <- function(fg.seqs, bg.seqs, method = c("cvp", "all")[1], min.seqs
     return()
 
   if (verbose)
-    message("Evaluating the significance of detected motifs")
-  motifor(fg.count = motifs, n.fg.seqs = length(seqs$fg.seqs),
+    message("Evaluating the significance of detected motifs ... ")
+  r <- motifor(fg.count = motifs, n.fg.seqs = length(seqs$fg.seqs),
           bg.seqs = seqs$bg.seqs, ncores = ncores, max.fdr = max.fdr)
-
+  
+  if (annotate) {
+    if (verbose)
+      message("Annotating detected motifs ...")
+    r <- annotKnownMotifs(r)
+  }
+  
+  r
 }
