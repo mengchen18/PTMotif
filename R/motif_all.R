@@ -18,7 +18,7 @@
 motif_all <- function(seqs, min.seqs, ncores = 1, verbose = FALSE) {
 
   # AA letters
-  aaa <- c("_","A","C","D","E","F","G","H","I","K","L",
+  aaa <- c("A","C","D","E","F","G","H","I","K","L",
            "M","N","P","Q","R","S","T","V","W","Y")
 
   # def function
@@ -43,12 +43,12 @@ motif_all <- function(seqs, min.seqs, ncores = 1, verbose = FALSE) {
   seq0 <- seqs
   seqs <- strsplit(seqs, "|")
   seqmat <- do.call(rbind, seqs)
+  # seqmat[seqmat == "_"] <- NA
   nc <- ncol(seqmat)
 
   ##
   ll <- list()
   v <- toAAFreq(seqmat, aaa = aaa, n = min.seqs)
-  tt <<- v
   if (nrow(v[[1]]) == 0) {
     message(paste("No motif presents more than", min.seqs, "times."))
     return()
