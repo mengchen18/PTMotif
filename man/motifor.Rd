@@ -9,7 +9,7 @@ motifor(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 0.01)
 \arguments{
 \item{fg.count}{a names integer vector. The names are the sequence motifs and
 the integers indicate the frequency of each motifs in the input sequences,
-usually return by \code{\link{motif_exh}} or \code{\link{motif_cvp}}.}
+usually return by \code{\link{motif_all}} or \code{\link{motif_cvp}}.}
 
 \item{n.fg.seqs}{the number of foreground sequences}
 

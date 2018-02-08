@@ -2,7 +2,7 @@
 #' @author Chen Meng
 #' @param fg.count a names integer vector. The names are the sequence motifs and
 #'   the integers indicate the frequency of each motifs in the input sequences,
-#'   usually return by \code{\link{motif_exh}} or \code{\link{motif_cvp}}.
+#'   usually return by \code{\link{motif_all}} or \code{\link{motif_cvp}}.
 #' @param n.fg.seqs the number of foreground sequences
 #' @param bg.seqs a character vector of background sequences
 #' @param ncores the number of cores to be used, passed to \code{mclapply}.
