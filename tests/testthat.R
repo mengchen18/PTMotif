@@ -34,4 +34,4 @@ seq <- c("ALNQKTSEKMKKSTMSNSFHGIRPP______",
 
 v <- motif_all(seq, min.seqs = 5)
 v <- motif_all(seqs = a$background[1:10], min.seqs = 3)
-v
+

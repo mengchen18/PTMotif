@@ -3,19 +3,24 @@
 #' @author Chen Meng
 #' @param seqs a character vector of sequences
 #' @param min.seqs minimum number of motif
+#' @param genes the gene name from where a sequences is discovered, a character vector
+#'   has the same length as \code{seqs}
 #' @param ncores the number of cores to be used, passed to \code{mclapply}.
 #' @param verbose logical, whether print detailed information
 #' @references He, Zengyou, Can Yang, Guangyu Guo, Ning Li, and Weichuan Yu. 2011.
 #'   "Motif-All: Discovering All Phosphorylation Motifs." BMC Bioinformatics
 #'   12 Suppl 1 (February):S22.
-#' @return a names integer vector. The names are the sequence motifs and
+#' @return a list consists of:
+#'   $mw - motif wise count, a names integer vector. The names are the sequence motifs and
 #'   the integers indicate the frequency of each motifs in the input sequences.
+#'   $gw - gene wise count, a list of two elements: 1) unique gene and 2) motif genes, i.e.
+#'   genes include a specific type of motif
 #' @importFrom parallel mclapply
 #' @importFrom stringr str_detect
 #' @export
 #'
 
-motif_all <- function(seqs, min.seqs, ncores = 1, verbose = FALSE) {
+motif_all <- function(seqs, min.seqs, genes = NULL, ncores = 1, verbose = FALSE) {
 
   # AA letters
   aaa <- c("A","C","D","E","F","G","H","I","K","L",
@@ -89,6 +94,17 @@ motif_all <- function(seqs, min.seqs, ncores = 1, verbose = FALSE) {
     c(paste(pp, collapse = ""), x$freq[1])
   })
   res <- structure(as.integer(res[2, ]), names = res[1, ])
-  sort(res, decreasing = TRUE)
+  res <- sort(res, decreasing = TRUE)
+  
+  if (!is.null(genes)) {
+    gn <- lapply(names(res), function(x) 
+      unique(genes[grep(x, seq0)])
+      )
+    names(gn) <- names(res)
+    gw <- list(motif.gene = gn, fg.gene = unique(genes))
+  } else 
+    gw <- NULL
+  
+  list(mw = res, gw = gw)
 }
 

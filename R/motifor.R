@@ -13,13 +13,14 @@
 #'
 
 motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 1e-2) {
+  
   motifs <- names(fg.count)
   count <- mclapply(motifs, function(x) sum(str_detect(bg.seqs, x)),
                     mc.cores = ncores)
   count <- unlist(count)
 
   nbg <- length(bg.seqs)
-  pv <- phyper(q = fg.count, m = count, n = nbg,
+  pv <- phyper(q = fg.count, m = count, n = nbg-count,
                k = n.fg.seqs, lower.tail = FALSE, log.p = FALSE)
   fdr <- p.adjust(pv, method = "fdr")
   or <- (fg.count/n.fg.seqs)/(count/nbg)
