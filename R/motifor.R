@@ -37,3 +37,48 @@ motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 1e-2) {
   df <- df[df$FDR < max.fdr, ]
   df[order(df$FDR, decreasing = FALSE), ]
 }
+
+
+
+#' Find over-represented motifs in a foreground list using hypergeometric test
+#' @author Chen Meng
+#' @param motif a motif
+#' @param fg.genes unique foreground genes
+#' @param fg.genes.motif unique foreground genes containing the motif
+#' @param bg.seqs the background sequences
+#' @param bg.genes a character vector of genes names of the bg.seqs, it
+#'   should have the same length as \code{bg.seqs}
+#' @importFrom parallel mclapply
+#' @importFrom stringr str_detect
+#' @export
+#'
+
+motifgeneor <- function(motif, fg.genes, fg.genes.motif, bg.seqs, bg.genes)  {
+
+  x <- length(fg.genes.motif)
+  i <- str_detect(bg.seqs, motif)
+  bg.genes.nomotif <- bg.genes[!i]
+  n <- length(unique(bg.genes.nomotif))
+  bg.genes.motif <- bg.genes[i]
+  m <- length(unique(bg.genes.motif))
+  k <- length(fg.genes)
+  pv <- phyper(q = x-1, m = m, n = n, k = k, lower.tail = FALSE, log.p = FALSE)
+
+  nbg <- m+n
+  count <- m
+  or <- (x/k)/(count/nbg)
+  data.frame(motif = motif,
+             OR = or,
+             pvalue = pv,
+             FDR = fdr,
+             fg.count = x,
+             fg.total = k,
+             bg.count = count,
+             bg.totol = nbg,
+             stringsAsFactors = FALSE,
+             row.names = NULL)
+
+}
+
+
+
