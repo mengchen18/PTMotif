@@ -31,7 +31,7 @@ motif_cvp <- function(seqs, min.seqs=1, genes=NULL, ncores = 1) {
   
   seq0 <- seqs
   seqs <- strsplit(seqs, "|")
-  aseq <- mclapply(seqs, subSeqs, mc.cores = ncores)
+  aseq <- mclapply(seqs, subSeqs, mc.cores = ncores, trim.char=TRUE)
   aseq <- unlist(aseq)
   count <- c(table(aseq))
   count <- count[count >= min.seqs]

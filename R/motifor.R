@@ -20,6 +20,7 @@ motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 1e-2) {
   count <- unlist(count)
 
   nbg <- length(bg.seqs)
+  
   pv <- phyper(q = fg.count-1, m = count, n = nbg-count,
                k = n.fg.seqs, lower.tail = FALSE, log.p = FALSE)
   fdr <- p.adjust(pv, method = "fdr")
@@ -51,7 +52,6 @@ motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 1e-2) {
 #' @importFrom parallel mclapply
 #' @importFrom stringr str_detect
 #' @export
-#'
 
 motifgeneor <- function(motif, fg.genes, fg.genes.motif, bg.seqs, bg.genes)  {
 
@@ -70,14 +70,13 @@ motifgeneor <- function(motif, fg.genes, fg.genes.motif, bg.seqs, bg.genes)  {
   data.frame(motif = motif,
              OR = or,
              pvalue = pv,
-             FDR = fdr,
              fg.count = x,
              fg.total = k,
              bg.count = count,
              bg.totol = nbg,
              stringsAsFactors = FALSE,
              row.names = NULL)
-
+  
 }
 
 

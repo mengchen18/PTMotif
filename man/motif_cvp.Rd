@@ -4,18 +4,24 @@
 \alias{motif_cvp}
 \title{Find consecutive but variable position (CVP) motif in a list of sequences}
 \usage{
-motif_cvp(seqs, min.seqs = 1, ncores = 1)
+motif_cvp(seqs, min.seqs = 1, genes = NULL, ncores = 1)
 }
 \arguments{
 \item{seqs}{a character vector of sequences}
 
 \item{min.seqs}{minimum number of motif}
 
+\item{genes}{the gene name from where a sequences is discovered, a character vector
+has the same length as \code{seqs}}
+
 \item{ncores}{the number of cores to be used, passed to \code{mclapply}.}
 }
 \value{
-a names integer vector. The names are the sequence motifs and
+a list consists of:
+  $mw - motif wise count, a names integer vector. The names are the sequence motifs and
   the integers indicate the frequency of each motifs in the input sequences.
+  $gw - gene wise count, a list of two elements: 1) unique gene and 2) motif genes, i.e.
+  genes include a specific type of motif
 }
 \description{
 Find consecutive but variable position (CVP) motif in a list of sequences

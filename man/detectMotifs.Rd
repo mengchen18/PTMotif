@@ -4,13 +4,20 @@
 \alias{detectMotifs}
 \title{Detect over-represented motifs}
 \usage{
-detectMotifs(fg.seqs, bg.seqs, method = c("cvp", "all")[1], min.seqs = 5,
-  max.fdr = 0.01, ncores = 1, verbose = TRUE, annotate = FALSE)
+detectMotifs(fg.seqs, bg.seqs, fg.genes = NULL, bg.genes = NULL,
+  method = c("cvp", "all")[1], min.seqs = 5, max.fdr = 0.01, ncores = 1,
+  verbose = TRUE, annotate = FALSE)
 }
 \arguments{
 \item{fg.seqs}{a character vector of foreground sequences}
 
 \item{bg.seqs}{a character vector of background sequences}
+
+\item{fg.genes}{character vector of gene names of foreground sequences, it
+should have the same length as \code{fg.seqs}}
+
+\item{bg.genes}{character vector of gene names of background sequences, it
+should have the same length as \code{bg.seqs}}
 
 \item{method}{the algorithm used to detect potential motifs, multiple are allowed}
 

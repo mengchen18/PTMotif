@@ -25,11 +25,25 @@ detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
   method <- match.arg(method, c("cvp", "all"), several.ok = TRUE)
 
   # check for fg./bg.genes, length, NA, avaliability, etc
-
   if (is.null(bg.genes) && !is.null(fg.genes)) {
     message("bg.genes is NULL, fg.genes is ignored. ")
     fg.genes <- NULL
   }
+  if (is.null(fg.genes) && !is.null(bg.genes)) {
+    message("fg.genes is NULL, bg.genes is ignored. ")
+    bg.genes <- NULL
+  }
+  if (!is.null(fg.genes) && !is.null(bg.genes)) {
+    if (length(fg.seqs) != length(fg.genes))
+      stop("fg.genes should have the same length as fg.seqs")
+    if (length(bg.seqs) != length(bg.genes))
+      stop("bg.genes should have the same length as bg.seqs")
+    if (any(is.na(fg.genes)))
+      fg.genes[is.na(fg.genes)] <- "unnamedGene"
+    if (any(is.na(bg.genes)))
+      bg.genes[is.na(bg.genes)] <- "unnamedGene"
+  }
+  
 
   if (verbose)
     message("Checking input sequences ...")
@@ -51,13 +65,21 @@ detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
       message("Detecting potential motifs using 'all' algorithm ...")
     motif_all <- motif_all(seqs$fg.seqs, min.seqs=min.seqs, ncores = ncores, verbose=verbose, genes = fg.genes)
   }
-  motifs <- unique(c(motif_cvp$mw, motif_all$mw))
+  
+  im <- setdiff(names(motif_cvp$mw), names(motif_all$mw))
+  motifs <- c(motif_cvp$mw[im], motif_all$mw)
 
   if (length(motifs) == 0)
     return()
 
   if (verbose)
     message("Evaluating the significance of detected motifs ... ")
+  
+  
+  tmp <<- list(fg.count = motifs, n.fg.seqs = length(seqs$fg.seqs),
+               bg.seqs = seqs$bg.seqs, ncores = ncores, max.fdr = max.fdr)
+  
+  
   r <- motifor(fg.count = motifs, n.fg.seqs = length(seqs$fg.seqs),
           bg.seqs = seqs$bg.seqs, ncores = ncores, max.fdr = max.fdr)
 
@@ -66,18 +88,23 @@ detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
       message("Annotating detected motifs ...")
     r <- annotKnownMotifs(r)
   }
-
-  if (!is.null(bg.genes)) {
-    gw <- unique(c(motif_cvp$gw$motif.gene, motif_all$gw$motif.gene))
-    fg.genes.unique <- gw$fg.gene
-
+  
+  
+  tmp1 <<- motif_cvp
+  l <- NULL
+  if (!is.null(bg.genes) && !is.null(fg.genes)) {
+    gw <- c(motif_cvp$gw$motif.gene[im], motif_all$gw$motif.gene)
+    fg.genes.unique <- unique(c(motif_all$gw$fg.gene, motif_cvp$gw$fg.gene))
+    
     l <- lapply(r$motif, function(m) {
       motifgeneor(motif = m, fg.genes = fg.genes.unique, fg.genes.motif = gw[[m]],
                   bg.seqs = bg.seqs, bg.genes = bg.genes)
     })
     l <- do.call(rbind, l)
+    colnames(l) <- paste("gw", colnames(l), sep = ".")
   }
-
-
-  cbibd(r, l)
+  
+  if (!is.null(l))
+    return(cbind(r, l[-1])) else
+      return(r)
 }
