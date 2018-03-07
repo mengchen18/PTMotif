@@ -86,7 +86,7 @@ motif_all <- function(seqs, min.seqs, genes = NULL, ncores = 1, verbose = FALSE)
     return()
   }
   if (verbose)
-    cat("Summarizing results...\n")
+    cat("Summarizing results ...\n")
   sv <- rep(".", nc)
   res <- sapply(res, function(x) {
     pp <- sv
@@ -96,7 +96,10 @@ motif_all <- function(seqs, min.seqs, genes = NULL, ncores = 1, verbose = FALSE)
   res <- structure(as.integer(res[2, ]), names = res[1, ])
   res <- sort(res, decreasing = TRUE)
   
+  
   if (!is.null(genes)) {
+    if (verbose)
+      cat("Summarizing results on gene level ...\n")
     gn <- lapply(names(res), function(x) 
       unique(genes[grep(x, seq0)])
       )

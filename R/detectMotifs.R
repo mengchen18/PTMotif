@@ -87,18 +87,20 @@ detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
   
   l <- NULL
   if (!is.null(bg.genes) && !is.null(fg.genes)) {
+    if (verbose)
+      message("Evaluating the significance of detected motifs on gene level ... ")
     gw <- c(motif_cvp$gw$motif.gene[im], motif_all$gw$motif.gene)
     fg.genes.unique <- unique(c(motif_all$gw$fg.gene, motif_cvp$gw$fg.gene))
     
-    l <- lapply(r$motif, function(m) {
+    l <- mclapply(r$motif, function(m) {
       motifgeneor(motif = m, fg.genes = fg.genes.unique, fg.genes.motif = gw[[m]],
                   bg.seqs = bg.seqs, bg.genes = bg.genes)
-    })
+    }, ncores = ncores)
     l <- do.call(rbind, l)
     colnames(l) <- paste("gw", colnames(l), sep = ".")
   }
   
   if (!is.null(l))
-    return(cbind(r, l[-1])) else
+    return(cbind(r, l[, -1])) else
       return(r)
 }
