@@ -1,34 +1,37 @@
 library(testthat)
 library(PTMotif)
 
-test_check("PTMotif")
-
-
 data("motifExampleData")
 a <- motifExampleData
 
-v <- detectMotifs(a$background[1:10], a$background[1:100], min.seqs = 3, method = "all", ncores = 4)
-v <- detectMotifs(a$background[1:3], a$background[1:100], min.seqs = 5, method = "all", ncores = 4)
-v <- detectMotifs(a$background[1:10], a$background[1:11], min.seqs = 5, method = "all", ncores = 4)
-v <- detectMotifs(a$background[1:5], a$background[1:5], min.seqs = 5, method = "all", ncores = 4)
+v <- detectMotifs(a$background[1:10], a$background[1:100], min.seqs = 3, method = "all", ncores = 1)
+v <- detectMotifs(a$background[1:3], a$background[1:100], min.seqs = 5, method = "all", ncores = 1)
+v <- detectMotifs(a$background[1:10], a$background[1:11], min.seqs = 5, method = "all", ncores = 1)
+v <- detectMotifs(a$background[1:5], a$background[1:5], min.seqs = 5, method = "all", ncores = 1)
 
 
 v1 <- detectMotifs(
   a$background[1:10], a$background[1:100], 
   fg.genes = paste0("g", 1:10), bg.genes = paste0("g", 1:100), 
-  min.seqs = 3, method = "all", ncores = 4, max.fdr = 0.5
+  min.seqs = 3, method = "all", ncores = 1, max.fdr = 0.5
 )
 
 v2 <- detectMotifs(
   a$background[1:10], a$background[1:100], 
   fg.genes = paste0("g", 1:10), bg.genes = paste0("g", 1:100), 
-  min.seqs = 3, method = "cvp", ncores = 4, max.fdr = 0.5
+  min.seqs = 3, method = "cvp", ncores = 1, max.fdr = 0.5
 )
 
 v3 <- detectMotifs(
   a$background[1:10], a$background[1:100], 
   fg.genes = paste0("g", 1:10), bg.genes = paste0("g", 1:100), 
-  min.seqs = 3, method = c("all", "cvp"), ncores = 4, max.fdr = 0.5
+  min.seqs = 3, method = c("all", "cvp"), ncores = 1, max.fdr = 0.5
+)
+
+v4 <- detectMotifs(
+  a$background[1:10], a$background[1:100], 
+  fg.genes = paste0("g", rep(1, 10)), bg.genes = paste0("g", 1:100), 
+  min.seqs = 3, method = c("all", "cvp"), ncores = 1, max.fdr = 0.5
 )
 
 

@@ -27,6 +27,8 @@ should have the same length as \code{bg.seqs}}
 
 \item{ncores}{the number of cores to be used, passed to \code{mclapply}.}
 
+\item{verbose}{logical, whether print message}
+
 \item{annotate}{whether the discovered motif should be annotated by known motifs}
 }
 \value{

@@ -9,6 +9,7 @@
 #' @param max.fdr the maximum FDR to be reported
 #' @return a \code{data.frame} of the over-representation data analysis
 #' @importFrom parallel mclapply
+#' @importFrom stats p.adjust phyper
 #' @export
 #'
 
@@ -51,6 +52,7 @@ motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 1e-2) {
 #'   should have the same length as \code{bg.seqs}
 #' @importFrom parallel mclapply
 #' @importFrom stringr str_detect
+#' @importFrom stats p.adjust phyper
 #' @export
 
 motifgeneor <- function(motif, fg.genes, fg.genes.motif, bg.seqs, bg.genes)  {
