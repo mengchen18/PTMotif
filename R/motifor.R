@@ -33,7 +33,7 @@ motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 1e-2) {
                    fg.count = fg.count,
                    fg.total = n.fg.seqs,
                    bg.count = count,
-                   bg.totol = nbg,
+                   bg.total = nbg,
                    stringsAsFactors = FALSE,
                    row.names = NULL)
   df <- df[df$FDR < max.fdr, ]
@@ -75,7 +75,7 @@ motifgeneor <- function(motif, fg.genes, fg.genes.motif, bg.seqs, bg.genes)  {
              fg.count = x,
              fg.total = k,
              bg.count = count,
-             bg.totol = nbg,
+             bg.total = nbg,
              stringsAsFactors = FALSE,
              row.names = NULL)
   
