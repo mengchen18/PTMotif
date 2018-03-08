@@ -5,8 +5,8 @@
 \title{Detect over-represented motifs}
 \usage{
 detectMotifs(fg.seqs, bg.seqs, fg.genes = NULL, bg.genes = NULL,
-  method = c("cvp", "all")[1], min.seqs = 5, max.fdr = 0.01, ncores = 1,
-  verbose = TRUE, annotate = FALSE)
+  method = c("cvp", "all")[1], min.seqs = 5, max.fdr = 0.01,
+  center = "STY", ncores = 1, verbose = TRUE, annotate = FALSE)
 }
 \arguments{
 \item{fg.seqs}{a character vector of foreground sequences}
@@ -24,6 +24,10 @@ should have the same length as \code{bg.seqs}}
 \item{min.seqs}{the minimum frequency of a motif should be considered}
 
 \item{max.fdr}{the maximum FDR to be reported}
+
+\item{center}{the amino acid centered at the sequences, sequences with other center AA would be 
+removed from the list. To disable this function, set \code{center = NULL}. Only used in 
+\code{checkSeqs} and \code{motif_all}.}
 
 \item{ncores}{the number of cores to be used, passed to \code{mclapply}.}
 

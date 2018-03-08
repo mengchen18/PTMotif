@@ -6,10 +6,12 @@
 #'   acceptable options are "extend" - extend the background list; "trim" - trim the foreground list,
 #'   i.e. remove the ones in foreground but not in background; "error" - stop and returns
 #'   error message.
+#' @param center the amino acid centered at the sequences, sequences with other center AA would be 
+#'   removed from the list. To disable this function, set \code{center = NULL}.
 #' @return a list has two components: fg.seqs and bg.seqs
 #' @export
 #'
-checkSeqs <- function(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1]) {
+checkSeqs <- function(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1], center = "STY") {
 
   # sequence length
   n1 <- unique(nchar(fg.seqs))
@@ -37,6 +39,14 @@ checkSeqs <- function(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1]
   if (!all(j)) 
     stop(paste("fg.seqs and bg.seqs should be amino acid sequences, allowed letters include:", 
       paste(aaa, collapse = ",")))
+  
+  # if center is not NULL
+  if (!is.null(center)) {
+    center  <- center[1]
+    center <- strsplit(center, "|")[[1]]
+    fg.seqs <- fg.seqs[substr(fg.seqs, (n1+1)/2, (n1+1)/2) %in% center]
+    bg.seqs <- bg.seqs[substr(bg.seqs, (n2+1)/2, (n2+1)/2) %in% center]
+  }
     
   # all fg should be in bg
   options <- match.arg(option, choices = c("extend", "trim", "error"))
@@ -54,6 +64,8 @@ checkSeqs <- function(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1]
     } else
       stop("Unknown option!")
   }
+  
+  
 
   list(fg.seqs = fg.seqs, bg.seqs = bg.seqs)
 }

@@ -4,7 +4,8 @@
 \alias{checkSeqs}
 \title{Internal function used to check the input foreground and background sequence vectors}
 \usage{
-checkSeqs(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1])
+checkSeqs(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1],
+  center = "STY")
 }
 \arguments{
 \item{fg.seqs}{a character vector of foreground sequences}
@@ -15,6 +16,9 @@ checkSeqs(fg.seqs, bg.seqs, option = c("extend", "trim", "error")[1])
 acceptable options are "extend" - extend the background list; "trim" - trim the foreground list,
 i.e. remove the ones in foreground but not in background; "error" - stop and returns
 error message.}
+
+\item{center}{the amino acid centered at the sequences, sequences with other center AA would be 
+removed from the list. To disable this function, set \code{center = NULL}.}
 }
 \value{
 a list has two components: fg.seqs and bg.seqs

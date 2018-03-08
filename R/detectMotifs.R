@@ -10,6 +10,9 @@
 #' @param min.seqs the minimum frequency of a motif should be considered
 #' @param ncores the number of cores to be used, passed to \code{mclapply}.
 #' @param max.fdr the maximum FDR to be reported
+#' @param center the amino acid centered at the sequences, sequences with other center AA would be 
+#'   removed from the list. To disable this function, set \code{center = NULL}. Only used in 
+#'   \code{checkSeqs} and \code{motif_all}.
 #' @param verbose logical, whether print message
 #' @param annotate whether the discovered motif should be annotated by known motifs
 #' @details more details here
@@ -21,7 +24,8 @@
 
 detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
                          method = c("cvp", "all")[1], min.seqs = 5,
-                         max.fdr = 1e-2, ncores = 1, verbose = TRUE, annotate = FALSE) {
+                         max.fdr = 1e-2, center = "STY",
+                         ncores = 1, verbose = TRUE, annotate = FALSE) {
   
   method <- match.arg(method, c("cvp", "all"), several.ok = TRUE)
   
@@ -48,7 +52,7 @@ detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
   
   if (verbose)
     message("Checking input sequences ...")
-  seqs <- checkSeqs(fg.seqs, bg.seqs, option = "extend")
+  seqs <- checkSeqs(fg.seqs, bg.seqs, option = "extend", center = center)
   
   if (length(fg.seqs) < min.seqs) {
     message("No potential motif discovered, try to lower the min.seqs.")
@@ -64,7 +68,8 @@ detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
   if ("all" %in% method) {
     if (verbose)
       message("Detecting potential motifs using 'all' algorithm ...")
-    motif_all <- motif_all(seqs$fg.seqs, min.seqs=min.seqs, ncores = ncores, verbose=verbose, genes = fg.genes)
+    motif_all <- motif_all(seqs$fg.seqs, min.seqs=min.seqs, ncores = ncores, 
+                           verbose=verbose, genes = fg.genes, center = center)
   }
   
   im <- setdiff(names(motif_cvp$mw), names(motif_all$mw))

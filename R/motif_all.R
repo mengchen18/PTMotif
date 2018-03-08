@@ -7,6 +7,8 @@
 #'   has the same length as \code{seqs}
 #' @param ncores the number of cores to be used, passed to \code{mclapply}.
 #' @param verbose logical, whether print detailed information
+#' @param center the amino acid centered at the sequences, sequences with other center AA would be 
+#'   removed from the list. To disable this function, set \code{center = NULL}.
 #' @references He, Zengyou, Can Yang, Guangyu Guo, Ning Li, and Weichuan Yu. 2011.
 #'   "Motif-All: Discovering All Phosphorylation Motifs." BMC Bioinformatics
 #'   12 Suppl 1 (February):S22.
@@ -20,7 +22,7 @@
 #' @export
 #'
 
-motif_all <- function(seqs, min.seqs, genes = NULL, ncores = 1, verbose = FALSE) {
+motif_all <- function(seqs, min.seqs, genes = NULL, ncores = 1, verbose = FALSE, center = "STY") {
 
   # AA letters
   aaa <- c("A","C","D","E","F","G","H","I","K","L",
@@ -95,7 +97,13 @@ motif_all <- function(seqs, min.seqs, genes = NULL, ncores = 1, verbose = FALSE)
   })
   res <- structure(as.integer(res[2, ]), names = res[1, ])
   res <- sort(res, decreasing = TRUE)
-  
+  if (!is.null(center)) {
+    center  <- center[1]
+    center <- strsplit(center, "|")[[1]]
+    cnam <- names(res)
+    cnam <- cnam[substr(cnam, (nc+1)/2, (nc+1)/2) %in% center]
+    res <- res[cnam]
+  }
   
   if (!is.null(genes)) {
     if (verbose)
