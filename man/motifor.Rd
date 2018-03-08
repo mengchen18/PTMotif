@@ -4,7 +4,7 @@
 \alias{motifor}
 \title{Find over-represented motifs in a foreground list using hypergeometric test}
 \usage{
-motifor(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 0.01)
+motifor(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.pvalue = 1e-06)
 }
 \arguments{
 \item{fg.count}{a names integer vector. The names are the sequence motifs and
@@ -17,7 +17,7 @@ usually return by \code{\link{motif_all}} or \code{\link{motif_cvp}}.}
 
 \item{ncores}{the number of cores to be used, passed to \code{mclapply}.}
 
-\item{max.fdr}{the maximum FDR to be reported}
+\item{max.pvalue}{the maximum FDR to be reported}
 }
 \value{
 a \code{data.frame} of the over-representation data analysis

@@ -6,20 +6,21 @@
 #' @param n.fg.seqs the number of foreground sequences
 #' @param bg.seqs a character vector of background sequences
 #' @param ncores the number of cores to be used, passed to \code{mclapply}.
-#' @param max.fdr the maximum FDR to be reported
+#' @param max.pvalue the maximum FDR to be reported
 #' @return a \code{data.frame} of the over-representation data analysis
 #' @importFrom parallel mclapply
 #' @importFrom stats p.adjust phyper
+#' @importFrom fastmatch fmatch
 #' @export
 #'
 
-motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 1e-2) {
-
+motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.pvalue = 1e-6) {
+  
   motifs <- names(fg.count)
   count <- mclapply(motifs, function(x) sum(str_detect(bg.seqs, x)),
                     mc.cores = ncores)
   count <- unlist(count)
-
+  
   nbg <- length(bg.seqs)
   
   pv <- phyper(q = fg.count-1, m = count, n = nbg-count,
@@ -36,8 +37,18 @@ motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 1e-2) {
                    bg.total = nbg,
                    stringsAsFactors = FALSE,
                    row.names = NULL)
-  df <- df[df$FDR < max.fdr, ]
-  df[order(df$FDR, decreasing = FALSE), ]
+  df <- df[df$pvalue < max.pvalue, ]
+  df <- df[order(df$FDR, decreasing = FALSE), ]
+  
+  idv <- mclapply(df$motif, function(x) {
+    p <- fmatch(x, df$motif)
+    i <- str_detect(x, df$motif)
+    if (!any(i))
+      return(TRUE)
+    !any(df$pvalue[i] < df$pvalue[p])
+  }, mc.cores = ncores)
+  idv <- unlist(idv)
+  df[idv, ]
 }
 
 
@@ -56,7 +67,7 @@ motifor <- function(fg.count, n.fg.seqs, bg.seqs, ncores = 1, max.fdr = 1e-2) {
 #' @export
 
 motifgeneor <- function(motif, fg.genes, fg.genes.motif, bg.seqs, bg.genes)  {
-
+  
   x <- length(fg.genes.motif)
   i <- str_detect(bg.seqs, motif)
   bg.genes.nomotif <- bg.genes[!i]
@@ -65,7 +76,7 @@ motifgeneor <- function(motif, fg.genes, fg.genes.motif, bg.seqs, bg.genes)  {
   m <- length(unique(bg.genes.motif))
   k <- length(fg.genes)
   pv <- phyper(q = x-1, m = m, n = n, k = k, lower.tail = FALSE, log.p = FALSE)
-
+  
   nbg <- m+n
   count <- m
   or <- (x/k)/(count/nbg)

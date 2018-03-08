@@ -9,7 +9,9 @@
 #' @param method the algorithm used to detect potential motifs, multiple are allowed
 #' @param min.seqs the minimum frequency of a motif should be considered
 #' @param ncores the number of cores to be used, passed to \code{mclapply}.
-#' @param max.fdr the maximum FDR to be reported
+#' @param max.pvalue the maximum FDR to be reported
+#' @param max.gw.pvalue the maximum p value of on gene wise to be reported, only useful
+#'   when both \code{fg.genes} and \code{bg.genes} are specified
 #' @param center the amino acid centered at the sequences, sequences with other center AA would be 
 #'   removed from the list. To disable this function, set \code{center = NULL}. Only used in 
 #'   \code{checkSeqs} and \code{motif_all}.
@@ -24,7 +26,7 @@
 
 detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
                          method = c("cvp", "all")[1], min.seqs = 5,
-                         max.fdr = 1e-2, center = "STY",
+                         max.pvalue = 1e-6, max.gw.pvalue = NULL, center = "STY",
                          ncores = 1, verbose = TRUE, annotate = FALSE) {
   
   method <- match.arg(method, c("cvp", "all"), several.ok = TRUE)
@@ -48,7 +50,6 @@ detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
     if (any(is.na(bg.genes)))
       bg.genes[is.na(bg.genes)] <- "unnamedGene"
   }
-  
   
   if (verbose)
     message("Checking input sequences ...")
@@ -82,7 +83,7 @@ detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
     message("Evaluating the significance of detected motifs ... ")
   
   r <- motifor(fg.count = motifs, n.fg.seqs = length(seqs$fg.seqs),
-               bg.seqs = seqs$bg.seqs, ncores = ncores, max.fdr = max.fdr)
+               bg.seqs = seqs$bg.seqs, ncores = ncores, max.pvalue = max.pvalue)
   
   if (annotate) {
     if (verbose)
@@ -91,6 +92,7 @@ detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
   }
   
   l <- NULL
+  gw.keeprow <- NULL
   if (!is.null(bg.genes) && !is.null(fg.genes)) {
     if (verbose)
       message("Evaluating the significance of detected motifs on gene level ... ")
@@ -107,11 +109,18 @@ detectMotifs <- function(fg.seqs, bg.seqs, fg.genes=NULL, bg.genes=NULL,
       }, mc.cores = ncores)
       l <- do.call(rbind, l)
       l <- l[, -1]
+      
+      if (!is.null(max.gw.pvalue))
+        gw.keeprow <- l$pvalue < max.gw.pvalue
     }
     colnames(l) <- paste("gw", colnames(l), sep = ".")
   }
   
-  if (!is.null(l))
-    return(cbind(r, l)) else
-      return(r)
+  if (!is.null(l)) {
+    r <- cbind(r, l)
+    if (!is.null(gw.keeprow))
+      r <- r[gw.keeprow, ]
+  }
+  
+  return(r)
 }
